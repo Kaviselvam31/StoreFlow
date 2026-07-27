@@ -1,6 +1,7 @@
 package com.storeflow.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.storeflow.repository.BranchRepository;
 @Service
 public class BranchService {
 
-    // Inject Repository
+    // Repository Injection
     private final BranchRepository branchRepository;
 
     // Constructor Injection
@@ -26,5 +27,10 @@ public class BranchService {
     // Get All Branches (GET API)
     public List<Branch> getAllBranches() {
         return branchRepository.findAll();
+    }
+
+    // Get Branch By ID (GET API)
+    public Optional<Branch> getBranchById(int id) {
+        return branchRepository.findById(id);
     }
 }
