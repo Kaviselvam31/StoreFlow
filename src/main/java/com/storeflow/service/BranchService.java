@@ -11,7 +11,6 @@ import com.storeflow.repository.BranchRepository;
 @Service
 public class BranchService {
 
-    // Repository Injection
     private final BranchRepository branchRepository;
 
     // Constructor Injection
@@ -19,18 +18,39 @@ public class BranchService {
         this.branchRepository = branchRepository;
     }
 
-    // Save Branch (POST API)
+    // POST API
     public Branch saveBranch(Branch branch) {
         return branchRepository.save(branch);
     }
 
-    // Get All Branches (GET API)
+    // GET ALL API
     public List<Branch> getAllBranches() {
         return branchRepository.findAll();
     }
 
-    // Get Branch By ID (GET API)
+    // GET BY ID API
     public Optional<Branch> getBranchById(int id) {
         return branchRepository.findById(id);
+    }
+
+    // UPDATE API
+    public Branch updateBranch(int id, Branch updatedBranch) {
+
+        Branch branch = branchRepository.findById(id).orElse(null);
+
+        if (branch != null) {
+            branch.setBranchName(updatedBranch.getBranchName());
+            branch.setCity(updatedBranch.getCity());
+            branch.setState(updatedBranch.getState());
+
+            return branchRepository.save(branch);
+        }
+
+        return null;
+    }
+
+    // DELETE API
+    public void deleteBranch(int id) {
+        branchRepository.deleteById(id);
     }
 }

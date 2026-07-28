@@ -3,12 +3,7 @@ package com.storeflow.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.storeflow.entity.Branch;
 import com.storeflow.service.BranchService;
@@ -19,26 +14,38 @@ public class BranchController {
 
     private final BranchService branchService;
 
-    // Constructor Injection
     public BranchController(BranchService branchService) {
         this.branchService = branchService;
     }
 
-    // POST API - Save Branch
+    // POST API
     @PostMapping
     public Branch saveBranch(@RequestBody Branch branch) {
         return branchService.saveBranch(branch);
     }
 
-    // GET API - Get All Branches
+    // GET ALL API
     @GetMapping
     public List<Branch> getAllBranches() {
         return branchService.getAllBranches();
     }
 
-    // GET API - Get Branch By ID
+    // GET BY ID API
     @GetMapping("/{id}")
     public Optional<Branch> getBranchById(@PathVariable int id) {
         return branchService.getBranchById(id);
+    }
+
+    // UPDATE API
+    @PutMapping("/{id}")
+    public Branch updateBranch(@PathVariable int id, @RequestBody Branch branch) {
+        return branchService.updateBranch(id, branch);
+    }
+
+    // DELETE API
+    @DeleteMapping("/{id}")
+    public String deleteBranch(@PathVariable int id) {
+        branchService.deleteBranch(id);
+        return "Branch deleted successfully!";
     }
 }
