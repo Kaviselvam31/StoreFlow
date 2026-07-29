@@ -38,14 +38,17 @@ public class BranchController {
 
     // UPDATE API
     @PutMapping("/{id}")
-    public Branch updateBranch(@PathVariable int id, @RequestBody Branch branch) {
+    public Branch updateBranch(@PathVariable int id,
+                               @RequestBody Branch branch) {
         return branchService.updateBranch(id, branch);
     }
 
     // DELETE API
     @DeleteMapping("/{id}")
     public String deleteBranch(@PathVariable int id) {
+
         branchService.deleteBranch(id);
-        return "Branch deleted successfully!";
+
+        return "Branch Deleted Successfully!";
     }
 }
