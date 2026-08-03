@@ -17,45 +17,45 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    // Create Product
+    // SAVE
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
 
-    // Get All Products
+    // GET ALL
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    // Get Product By Id
+    // GET BY ID
     public Optional<Product> getProductById(int id) {
         return productRepository.findById(id);
     }
 
-    // Update Product
-    public Product updateProduct(int id, Product updatedProduct) {
+    // UPDATE
+    public Product updateProduct(int id, Product product) {
 
-        Product product = productRepository.findById(id)
+        Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product Not Found"));
 
-        product.setProductName(updatedProduct.getProductName());
-        product.setBrand(updatedProduct.getBrand());
-        product.setCategoryId(updatedProduct.getCategoryId());
-        product.setSupplierId(updatedProduct.getSupplierId());
-        product.setBarcode(updatedProduct.getBarcode());
-        product.setMrp(updatedProduct.getMrp());
-        product.setSellingPrice(updatedProduct.getSellingPrice());
-        product.setDiscountPercentage(updatedProduct.getDiscountPercentage());
-        product.setManufactureDate(updatedProduct.getManufactureDate());
-        product.setExpiryDate(updatedProduct.getExpiryDate());
-        product.setWeight(updatedProduct.getWeight());
-        product.setUnit(updatedProduct.getUnit());
-        product.setDescription(updatedProduct.getDescription());
+        existingProduct.setProductName(product.getProductName());
+        existingProduct.setBrand(product.getBrand());
+        existingProduct.setCategoryId(product.getCategoryId());
+        existingProduct.setSupplierId(product.getSupplierId());
+        existingProduct.setBarcode(product.getBarcode());
+        existingProduct.setMrp(product.getMrp());
+        existingProduct.setSellingPrice(product.getSellingPrice());
+        existingProduct.setDiscountPercentage(product.getDiscountPercentage());
+        existingProduct.setManufactureDate(product.getManufactureDate());
+        existingProduct.setExpiryDate(product.getExpiryDate());
+        existingProduct.setWeight(product.getWeight());
+        existingProduct.setUnit(product.getUnit());
+        existingProduct.setDescription(product.getDescription());
 
-        return productRepository.save(product);
+        return productRepository.save(existingProduct);
     }
 
-    // Delete Product
+    // DELETE
     public String deleteProduct(int id) {
 
         if (productRepository.existsById(id)) {
