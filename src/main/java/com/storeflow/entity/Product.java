@@ -1,6 +1,5 @@
 package com.storeflow.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
@@ -11,34 +10,28 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "product_name")
+    @Column(nullable = false)
     private String productName;
 
     private String brand;
 
-    @Column(name = "category_id")
-    private Integer categoryId;
+    private int categoryId;
 
-    @Column(name = "supplier_id")
-    private Integer supplierId;
+    private int supplierId;
 
+    @Column(unique = true)
     private String barcode;
 
-    private BigDecimal mrp;
+    private double mrp;
 
-    @Column(name = "selling_price")
-    private BigDecimal sellingPrice;
+    private double sellingPrice;
 
-    @Column(name = "discount_percentage")
-    private BigDecimal discountPercentage;
+    private double discountPercentage;
 
-    @Column(name = "manufacture_date")
     private LocalDate manufactureDate;
 
-    @Column(name = "expiry_date")
     private LocalDate expiryDate;
 
     private String weight;
@@ -47,11 +40,11 @@ public class Product {
 
     private String description;
 
-    // Default Constructor
+    // New field for Soft Delete
+    private String status;
+
     public Product() {
     }
-
-    // Getters and Setters
 
     public int getProductId() {
         return productId;
@@ -77,19 +70,19 @@ public class Product {
         this.brand = brand;
     }
 
-    public Integer getCategoryId() {
+    public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
-    public Integer getSupplierId() {
+    public int getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(Integer supplierId) {
+    public void setSupplierId(int supplierId) {
         this.supplierId = supplierId;
     }
 
@@ -101,27 +94,27 @@ public class Product {
         this.barcode = barcode;
     }
 
-    public BigDecimal getMrp() {
+    public double getMrp() {
         return mrp;
     }
 
-    public void setMrp(BigDecimal mrp) {
+    public void setMrp(double mrp) {
         this.mrp = mrp;
     }
 
-    public BigDecimal getSellingPrice() {
+    public double getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(BigDecimal sellingPrice) {
+    public void setSellingPrice(double sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 
-    public BigDecimal getDiscountPercentage() {
+    public double getDiscountPercentage() {
         return discountPercentage;
     }
 
-    public void setDiscountPercentage(BigDecimal discountPercentage) {
+    public void setDiscountPercentage(double discountPercentage) {
         this.discountPercentage = discountPercentage;
     }
 
@@ -163,5 +156,13 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

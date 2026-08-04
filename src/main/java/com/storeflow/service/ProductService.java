@@ -17,22 +17,34 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    // SAVE
+    // =========================
+    // SAVE PRODUCT
+    // =========================
     public Product saveProduct(Product product) {
+
+        // Automatically set ACTIVE status for new products
+        product.setStatus("ACTIVE");
+
         return productRepository.save(product);
     }
 
-    // GET ALL
+    // =========================
+    // GET ALL PRODUCTS
+    // =========================
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    // GET BY ID
+    // =========================
+    // GET PRODUCT BY ID
+    // =========================
     public Optional<Product> getProductById(int id) {
         return productRepository.findById(id);
     }
 
-    // UPDATE
+    // =========================
+    // UPDATE PRODUCT
+    // =========================
     public Product updateProduct(int id, Product product) {
 
         Product existingProduct = productRepository.findById(id)
@@ -52,17 +64,36 @@ public class ProductService {
         existingProduct.setUnit(product.getUnit());
         existingProduct.setDescription(product.getDescription());
 
+        // Keep current status if not provided
+        if (product.getStatus() != null) {
+            existingProduct.setStatus(product.getStatus());
+        }
+
         return productRepository.save(existingProduct);
     }
 
-    // DELETE
+    // =========================
+    // GET ALL ACTIVE PRODUCTS
+    // =========================
+    public List<Product> getAllActiveProducts() {
+        return productRepository.findAll()
+                .stream()
+                .filter(product -> "ACTIVE".equalsIgnoreCase(product.getStatus()))
+                .toList();
+    }
+
+    // =========================
+    // SOFT DELETE PRODUCT
+    // =========================
     public String deleteProduct(int id) {
 
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return "Product Deleted Successfully";
-        }
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product Not Found"));
 
-        return "Product Not Found";
+        product.setStatus("INACTIVE");
+
+        productRepository.save(product);
+
+        return "Product Soft Deleted Successfully";
     }
 }

@@ -18,32 +18,32 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // SAVE
+    // SAVE PRODUCT
     @PostMapping
     public Product saveProduct(@RequestBody Product product) {
         return productService.saveProduct(product);
     }
 
-    // GET ALL
+    // GET ALL ACTIVE PRODUCTS
     @GetMapping
     public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+        return productService.getAllActiveProducts();
     }
 
-    // GET BY ID
+    // GET PRODUCT BY ID
     @GetMapping("/{id}")
     public Optional<Product> getProductById(@PathVariable int id) {
         return productService.getProductById(id);
     }
 
-    // UPDATE
+    // UPDATE PRODUCT
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable int id,
                                  @RequestBody Product product) {
         return productService.updateProduct(id, product);
     }
 
-    // DELETE
+    // SOFT DELETE PRODUCT
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable int id) {
         return productService.deleteProduct(id);
