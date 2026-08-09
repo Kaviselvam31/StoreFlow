@@ -49,14 +49,19 @@ public class SupplierService {
         return supplierRepository.save(existingSupplier);
     }
 
-    // DELETE
+    // SOFT DELETE
     public String deleteSupplier(int id) {
 
-        if (supplierRepository.existsById(id)) {
-            supplierRepository.deleteById(id);
-            return "Supplier Deleted Successfully";
+        Supplier supplier = supplierRepository.findById(id)
+                .orElse(null);
+
+        if (supplier == null) {
+            return "Supplier Not Found";
         }
 
-        return "Supplier Not Found";
+        supplier.setStatus("Inactive");
+        supplierRepository.save(supplier);
+
+        return "Supplier Deactivated Successfully";
     }
 }
