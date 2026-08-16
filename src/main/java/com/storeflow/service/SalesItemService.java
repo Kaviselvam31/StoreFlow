@@ -4,21 +4,55 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.storeflow.entity.Sales;
 import com.storeflow.entity.SalesItem;
 import com.storeflow.repository.SalesItemRepository;
+import com.storeflow.repository.SalesRepository;
 
 @Service
 public class SalesItemService {
 
     private final SalesItemRepository salesItemRepository;
+    private final SalesRepository salesRepository;
+    private final InventoryService inventoryService;
 
-    public SalesItemService(SalesItemRepository salesItemRepository) {
+    public SalesItemService(
+            SalesItemRepository salesItemRepository,
+            SalesRepository salesRepository,
+            InventoryService inventoryService) {
+
         this.salesItemRepository = salesItemRepository;
+        this.salesRepository = salesRepository;
+        this.inventoryService = inventoryService;
     }
 
     // SAVE
+    @Transactional
     public SalesItem saveSalesItem(SalesItem salesItem) {
+
+        // 1. Validate quantity
+        if (salesItem.getQuantity() <= 0) {
+            throw new RuntimeException("Quantity must be greater than 0");
+        }
+
+        // 2. Find Sale
+        Sales sales = salesRepository.findById(salesItem.getSaleId())
+                .orElseThrow(() ->
+                        new RuntimeException("Sale Not Found"));
+
+        // 3. Get branch from Sale
+        int branchId = sales.getBranchId();
+
+        // 4. Reduce inventory stock
+        inventoryService.reduceStock(
+                salesItem.getProductId(),
+                branchId,
+                salesItem.getQuantity()
+        );
+
+        // 5. Save SalesItem
         return salesItemRepository.save(salesItem);
     }
 
@@ -36,7 +70,8 @@ public class SalesItemService {
     public SalesItem updateSalesItem(int id, SalesItem salesItem) {
 
         SalesItem existingSalesItem = salesItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Sales Item Not Found"));
+                .orElseThrow(() ->
+                        new RuntimeException("Sales Item Not Found"));
 
         existingSalesItem.setSaleId(salesItem.getSaleId());
         existingSalesItem.setProductId(salesItem.getProductId());
