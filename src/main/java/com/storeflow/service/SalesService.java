@@ -60,4 +60,20 @@ public class SalesService {
 
         return "Sale Not Found";
     }
+
+    // BRANCH-WISE SALES
+    public List<Object[]> getBranchWiseSales() {
+        return salesRepository.getBranchWiseSales();
+    }
+    // HIGHEST-SELLING BRANCH
+public Object[] getHighestSellingBranch() {
+
+    List<Object[]> results = salesRepository.getHighestSellingBranch();
+
+    if (results.isEmpty()) {
+        return null;
+    }
+
+    return results.get(0);
+}
 }

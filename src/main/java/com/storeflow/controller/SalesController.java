@@ -50,4 +50,14 @@ public class SalesController {
     public String deleteSale(@PathVariable int id) {
         return salesService.deleteSale(id);
     }
+    // BRANCH-WISE SALES
+@GetMapping("/branch-wise")
+public List<Object[]> getBranchWiseSales() {
+    return salesService.getBranchWiseSales();
+}
+// HIGHEST-SELLING BRANCH
+@GetMapping("/highest-branch")
+public Object[] getHighestSellingBranch() {
+    return salesService.getHighestSellingBranch();
+}
 }
