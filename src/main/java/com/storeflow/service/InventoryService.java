@@ -49,7 +49,10 @@ public class InventoryService {
     // =========================
     // REDUCE STOCK AFTER SALE
     // =========================
-    public void reduceStock(int productId, int branchId, int quantity) {
+    public void reduceStock(
+            int productId,
+            int branchId,
+            int quantity) {
 
         Inventory inventory = inventoryRepository
                 .findByProductIdAndBranchId(productId, branchId);
@@ -74,7 +77,54 @@ public class InventoryService {
         inventory.setAvailableStock(remainingStock);
 
         // Update stock status
-        if (remainingStock <= inventory.getReorderLevel()) {
+        if (remainingStock == 0) {
+            inventory.setStockStatus("OUT OF STOCK");
+        } else if (remainingStock <= inventory.getReorderLevel()) {
+            inventory.setStockStatus("LOW STOCK");
+        } else {
+            inventory.setStockStatus("AVAILABLE");
+        }
+
+        // Update date
+        inventory.setStockLastUpdate(LocalDate.now());
+
+        // Save updated inventory
+        inventoryRepository.save(inventory);
+    }
+
+    // =========================
+    // INCREASE STOCK AFTER PURCHASE
+    // =========================
+    public void increaseStock(
+            int productId,
+            int branchId,
+            int quantity) {
+
+        Inventory inventory = inventoryRepository
+                .findByProductIdAndBranchId(productId, branchId);
+
+        // Check inventory exists
+        if (inventory == null) {
+            throw new RuntimeException("Inventory Not Found");
+        }
+
+        // Validate quantity
+        if (quantity <= 0) {
+            throw new RuntimeException(
+                    "Purchase Quantity Must Be Greater Than 0"
+            );
+        }
+
+        // Increase stock
+        int newStock =
+                inventory.getAvailableStock() + quantity;
+
+        inventory.setAvailableStock(newStock);
+
+        // Update stock status
+        if (newStock == 0) {
+            inventory.setStockStatus("OUT OF STOCK");
+        } else if (newStock <= inventory.getReorderLevel()) {
             inventory.setStockStatus("LOW STOCK");
         } else {
             inventory.setStockStatus("AVAILABLE");
@@ -90,9 +140,12 @@ public class InventoryService {
     // =========================
     // UPDATE
     // =========================
-    public Inventory updateInventory(int id, Inventory inventory) {
+    public Inventory updateInventory(
+            int id,
+            Inventory inventory) {
 
-        Inventory existingInventory = inventoryRepository.findById(id)
+        Inventory existingInventory =
+                inventoryRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Inventory Not Found"));
 
