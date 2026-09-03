@@ -3,8 +3,16 @@ package com.storeflow.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.storeflow.dto.BranchSalesResponse;
 import com.storeflow.entity.Sales;
 import com.storeflow.service.SalesService;
 
@@ -18,25 +26,35 @@ public class SalesController {
         this.salesService = salesService;
     }
 
-    // SAVE
+    // =========================
+    // SAVE SALE
+    // =========================
     @PostMapping
     public Sales saveSale(@RequestBody Sales sales) {
         return salesService.saveSale(sales);
     }
 
-    // GET ALL
+    // =========================
+    // GET ALL SALES
+    // =========================
     @GetMapping
     public List<Sales> getAllSales() {
         return salesService.getAllSales();
     }
 
-    // GET BY ID
+    // =========================
+    // GET SALE BY ID
+    // =========================
     @GetMapping("/{id}")
-    public Optional<Sales> getSaleById(@PathVariable int id) {
+    public Optional<Sales> getSaleById(
+            @PathVariable int id) {
+
         return salesService.getSaleById(id);
     }
 
-    // UPDATE
+    // =========================
+    // UPDATE SALE
+    // =========================
     @PutMapping("/{id}")
     public Sales updateSale(
             @PathVariable int id,
@@ -45,19 +63,31 @@ public class SalesController {
         return salesService.updateSale(id, sales);
     }
 
-    // DELETE
+    // =========================
+    // DELETE SALE
+    // =========================
     @DeleteMapping("/{id}")
-    public String deleteSale(@PathVariable int id) {
+    public String deleteSale(
+            @PathVariable int id) {
+
         return salesService.deleteSale(id);
     }
+
+    // =========================
     // BRANCH-WISE SALES
-@GetMapping("/branch-wise")
-public List<Object[]> getBranchWiseSales() {
-    return salesService.getBranchWiseSales();
-}
-// HIGHEST-SELLING BRANCH
-@GetMapping("/highest-branch")
-public Object[] getHighestSellingBranch() {
-    return salesService.getHighestSellingBranch();
-}
+    // =========================
+    @GetMapping("/branch-wise")
+    public List<BranchSalesResponse> getBranchWiseSales() {
+
+        return salesService.getBranchWiseSales();
+    }
+
+    // =========================
+    // HIGHEST-SELLING BRANCH
+    // =========================
+    @GetMapping("/highest-branch")
+    public Object[] getHighestSellingBranch() {
+
+        return salesService.getHighestSellingBranch();
+    }
 }
